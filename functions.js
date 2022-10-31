@@ -1,99 +1,72 @@
 // const chalk  = require('chalk');
+const { rejects } = require('assert');
 const fs = require('fs');
 const pathNode = require('node:path');
 
 // Validar si la ruta es absoluta, sino se convierte en relativa
 const getAbsolutePath = (userPath) => {
-  let pathAbsolute = '';
-  if(pathNode.isAbsolute(userPath)){
-      pathAbsolute = userPath;
-      console.log('----> Tu Ruta Es Absoluta:', pathAbsolute)
-  }else{
-      pathAbsolute = pathNode.resolve(userPath)
-      console.log('----> Cambio de relativa a absoluta', pathAbsolute)
-  }
-  return pathAbsolute
+let pathAbsolute = '';
+    if(pathNode.isAbsolute(userPath)){
+        pathAbsolute = userPath;
+        console.log('----> Tu Ruta Es Absoluta:', pathAbsolute)
+}else{
+        pathAbsolute = pathNode.resolve(userPath)
+        console.log('----> Cambio de relativa a absoluta', pathAbsolute)
+}
+return pathAbsolute
 }
 
 // Obtener Archivos de una carpeta
 const getFiles = (path) => {
-    // const isFile = fs.statSync(path).isFile()
-    // const isDirectory = fs.statSync(path).isDirectory()
     let files = []
 
     if(fs.statSync(path).isFile()){
-    files.push(path)
-    // console.log('Es archivo')
-    // console.log('FILES:',files)
+        files.push(path)
     }
     else{
-        // console.log('--> Es directorio?', isDirectory)
         const filesInDir = fs.readdirSync(path)
-            filesInDir.forEach( file => {
-            const pathDir = pathNode.join(path, file)
-            if(fs.statSync(pathDir).isDirectory()){
-            console.log('es carpeta')
-            files = files.concat(getFiles(pathDir))
-            } else{
-            files.push(pathDir)
-        }
-        // console.log('ARRAY FILES:',files)
+        filesInDir.forEach( file => {
+                const pathDir = pathNode.join(path, file)
+                if(fs.statSync(pathDir).isDirectory()){
+                    files = files.concat(getFiles(pathDir))
+                } else{
+                    files.push(pathDir)
+                }
         })
-        // console.log('files-----', files)
-        return files
-        // console.log('FILES IN DIR:',filesInDir)
     }
+    return files
 }
 
-const pathUser = getAbsolutePath('carpetaPrueba')
-console.log(getFiles(pathUser)) 
+// Filtar archivos md
+const getMdFiles = (arrayFiles) => {
+    const mdFiles = arrayFiles.filter( file => pathNode.extname(file) === '.md')
+    console.log('solo archivos md', mdFiles)
+    return mdFiles
+}
 
-// getFiles('E:/Laboratoria-MDLINKS/BOG005-md-links/carpetaPrueba/otroArchivo.txt')
+// Leer Archivos md
+const readFiles = (file) => {
+    return new Promise ((resolve, reject)=>{
+        fs.readFile(file, 'utf8', (err, data)=>{
+                if (err) {
+                    throw err;
+                } else {
+                    resolve(data)
+                }
+            })
+    })
+}
 
+// Iterar en el array de archivos y retornar promesas 
+const loopFilesMd = (arrayMd) => {
+    let arrayPromises =  arrayMd.map((file)=>{
+        return readFiles(file)
+    })
+    return Promise.all(arrayPromises).then(res=>res)
+}
 
-// module.exports = () => {
-// };
-
-// const readFiles = (path) => {
-
-//     fs.readFile(path, (err,data)=>{
-//     if(err) {
-//       console.log('error: ', err);
-//     } else {
-//       console.log(data.toString());
-//     }
-//   })
-// }
-
-// // De forma relativa y absoluta mi función encuentra el archivo
-// // readFiles('./carpetaPrueba/archivoEjemplo.md')
-// readFiles('E:/Laboratoria-MDLINKS/BOG005-md-links/carpetaPrueba/archivoEjemplo.md')
-
-// const readFiles = (path,callBack) => {
-//     fs.readFile(path, 'utf-8', callBack)
-// }
-
-// const CallBackFunction = (err, data) => {
-//   if(err) {
-//     console.log('error: ', err);
-//   } else {
-//     console.log('---> Este es el contenido de tu archivo :',data);
-//   }
-// }
-
-// const extensionFile = (pathFile) => {
-//   const extension = path.extname(pathFile)
-//   console.log('--> La extensión del archivo es:',extension)
-//   return extension;
-// }
-
-// const isMdFile = (path) => {
-//   const extension = extensionFile(path);
-//   if(extension === '.md'){
-//     readFiles(path,  CallBackFunction)
-//   } else{
-//     console.log('x No hay archivos md por leer')
-//   }
-// }
-
-// isMdFile('E:/Laboratoria-MDLINKS/BOG005-md-links/carpetaPrueba/archivoEjemplo.md')
+const pathUser = getAbsolutePath('E:/Laboratoria-MDLINKS/BOG005-md-links/carpetaPrueba');
+const allFiles = getFiles(pathUser);
+const allMdFiles = getMdFiles(allFiles)
+// readFiles('E:/Laboratoria-MDLINKS/BOG005-md-links/carpetaPrueba/segundoArchivo.md').then((res) =>{ console.log('leyendo archivos----', res)})
+loopFilesMd(allFiles).then((res)=> console.log(res))
