@@ -5,6 +5,8 @@
     "node": ">=14.x"
   },
   "dependencies": {
-    "chalk": "^5.1.2"
+    "chalk": "^4.1.2",
+    "marked": "^4.1.1",
+    "node-fetch": "^2.6.7"
   }
 }
