@@ -2,7 +2,8 @@ const chalk  = require('chalk');
 const fs = require('fs');
 const pathNode = require('node:path');
 const marked = require('marked');
-const fetch = require('node-fetch')
+const fetch = require('node-fetch');
+const { fail } = require('assert');
 
 
 // Validar si la ruta es absoluta, sino se convierte en relativa
@@ -39,7 +40,7 @@ const getFiles = (path) => {
 // Filtar archivos md
 const getMdFiles = (arrayFiles) => {
     const mdFiles = arrayFiles.filter( file => pathNode.extname(file) === '.md')
-    console.log(chalk.bgYellow.bold('-> Estos son tus archivos .md'), mdFiles)
+    console.log(chalk.bgYellow.bold('-> Estos son tus archivos .md '), mdFiles)
     return mdFiles
 }
 
@@ -67,7 +68,7 @@ const readFiles = (file) => {
                     resolve(links);
                 }
             })
-            return Promise.all(links).then((res) => res);
+            return Promise.all(links).then((res) => res.flat());
     })
 }
 
@@ -76,21 +77,45 @@ const loopFilesMd = (arrayMd) => {
     let arrayPromises =  arrayMd.map((file)=>{
         return readFiles(file)
     })
-    return Promise.all(arrayPromises).then(res=>res)
+    return Promise.all(arrayPromises).then(res=>res.flat())
 }
 
 // Validar Links 
 const httpLinks = (allLinks) => {
-let promisesLinks = allLinks.map( link => 
-    fetch(link.href)
-    
-    )
+let promisesLinks = allLinks.map( link => {
+    return fetch(link.href) 
+    .then(res => {
+        if (res.status >= 200 && res.status < 400){
+            return ({ href: link.href,
+                      file: link.file, 
+                      text: link.text, 
+                      status: res.status, 
+                      OK: res.statusText })
+        }
+        else if( res.status >= 400 && res.status < 600){
+            return ({ href: link.href,
+                file: link.file, 
+                text: link.text, 
+                status: res.status, 
+                OK: "fail" })
+        }
+    })
+})
+    return Promise.all(promisesLinks)
 }
 
 
-fetch("https://developers.google.com/v8/").then((data) => console.log(data));
+
 
 const pathUser = getAbsolutePath('E:/Laboratoria-MDLINKS/BOG005-md-links/carpetaPrueba');
 const allFiles = getFiles(pathUser);
 const allMdFiles = getMdFiles(allFiles)
-loopFilesMd(allMdFiles).then((res)=> console.log(chalk.bgMagenta.bold('-> Links de tus archivos .md'), res.flat() ))
+ loopFilesMd(allMdFiles).then((res)=> console.log(chalk.bgMagenta.bold('-> Links de tus archivos .md '), res))
+// httpLinks(linksinmd).then( (res) => console.log(res))
+// console.log(linksinmd)
+// httpLinks(linksinmd)
+
+loopFilesMd(allMdFiles)
+//   .then((res)=> console.log(chalk.bgMagenta.bold('-> Links de tus archivos .md'), res))
+  .then((res) => httpLinks(res))
+  .then((res) => console.log(chalk.bgBlue.bold("-> Status de tus Links "), res));
