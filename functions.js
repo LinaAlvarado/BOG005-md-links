@@ -3,8 +3,6 @@ const fs = require('fs');
 const pathNode = require('node:path');
 const marked = require('marked');
 const fetch = require('node-fetch');
-const { fail } = require('assert');
-
 
 // Validar si la ruta es absoluta, sino se convierte en relativa
 const getAbsolutePath = (userPath) => {
@@ -20,7 +18,7 @@ return pathAbsolute
 // Obtener Archivos de una carpeta
 const getFiles = (path) => {
     let files = []
-    try{
+    // try{
         if(fs.statSync(path).isFile()){
             files.push(path)
         }
@@ -31,16 +29,16 @@ const getFiles = (path) => {
                     files = files.concat(getFiles(pathDir))
             })
         }
-    } catch (error){
-        console.log(chalk.bgRed.bold('Ruta invalida ❌, ingresa una ruta valida. '))
-    }
+    // } catch (error){
+    //     console.log(chalk.bgRed.bold('Ruta invalida ❌, ingresa una ruta valida. '))
+    // }
     return files
 }
 
 // Filtar archivos md
 const getMdFiles = (arrayFiles) => {
     const mdFiles = arrayFiles.filter( file => pathNode.extname(file) === '.md')
-    console.log(chalk.bgYellow.bold('-> Estos son tus archivos .md '), mdFiles)
+    // console.log(chalk.bgYellow.bold('-> Estos son tus archivos .md '), mdFiles)
     return mdFiles
 }
 
@@ -104,18 +102,11 @@ let promisesLinks = allLinks.map( link => {
     return Promise.all(promisesLinks)
 }
 
+module.exports = {
+    getAbsolutePath,
+    getFiles,
+    getMdFiles,
+    loopFilesMd,
+    httpLinks
+}
 
-
-
-const pathUser = getAbsolutePath('E:/Laboratoria-MDLINKS/BOG005-md-links/carpetaPrueba');
-const allFiles = getFiles(pathUser);
-const allMdFiles = getMdFiles(allFiles)
- loopFilesMd(allMdFiles).then((res)=> console.log(chalk.bgMagenta.bold('-> Links de tus archivos .md '), res))
-// httpLinks(linksinmd).then( (res) => console.log(res))
-// console.log(linksinmd)
-// httpLinks(linksinmd)
-
-loopFilesMd(allMdFiles)
-//   .then((res)=> console.log(chalk.bgMagenta.bold('-> Links de tus archivos .md'), res))
-  .then((res) => httpLinks(res))
-  .then((res) => console.log(chalk.bgBlue.bold("-> Status de tus Links "), res));
