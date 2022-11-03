@@ -24,7 +24,7 @@ const mdLinks = (path, options = { validate: false }) => {
             } 
         } catch (error){
             if(error.code == 'ENOENT'){
-                reject(chalk.bgRed.bold('Ruta invalida ❌, ingresa una ruta valida. '))
+                reject(chalk.bgRed.bold('Invalid Path ❌,Enter a valid path . '))
             } else{
                 reject('Error ❌')
             }
