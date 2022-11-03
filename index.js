@@ -21,7 +21,7 @@ const mdLinks = (path, options = { validate: false }) => {
             else if( options.validate == false){
                 loopFilesMd(allMdFiles)
                 .then((res) => resolve(res))
-            }
+            } 
         } catch (error){
             if(error.code == 'ENOENT'){
                 reject(chalk.bgRed.bold('Ruta invalida ❌, ingresa una ruta valida. '))

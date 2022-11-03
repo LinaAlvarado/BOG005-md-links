@@ -1,4 +1,3 @@
-const chalk  = require('chalk');
 const fs = require('fs');
 const pathNode = require('node:path');
 const marked = require('marked');
@@ -18,7 +17,6 @@ return pathAbsolute
 // Obtener Archivos de una carpeta
 const getFiles = (path) => {
     let files = []
-    // try{
         if(fs.statSync(path).isFile()){
             files.push(path)
         }
@@ -29,16 +27,12 @@ const getFiles = (path) => {
                     files = files.concat(getFiles(pathDir))
             })
         }
-    // } catch (error){
-    //     console.log(chalk.bgRed.bold('Ruta invalida ❌, ingresa una ruta valida. '))
-    // }
     return files
 }
 
 // Filtar archivos md
 const getMdFiles = (arrayFiles) => {
     const mdFiles = arrayFiles.filter( file => pathNode.extname(file) === '.md')
-    // console.log(chalk.bgYellow.bold('-> Estos son tus archivos .md '), mdFiles)
     return mdFiles
 }
 
@@ -102,11 +96,36 @@ let promisesLinks = allLinks.map( link => {
     return Promise.all(promisesLinks)
 }
 
+// Estadisticas de funciones 
+const statsLinks = (links) => {
+ const total = {
+    'Total' : links.length,
+    'Unique' : new Set (links).size
+ }
+
+ return total
+}
+
+// validar links en estadisticas
+const validateStatsLinks = (links)=>{
+    const linksBrokens = links.filter( link => link.OK === 'fail' )
+
+    const total = {
+        'Total' : links.length,
+        'Unique' : new Set (links).size,
+        'Broken' : linksBrokens.length
+     }
+
+     return total
+}
+
 module.exports = {
     getAbsolutePath,
     getFiles,
     getMdFiles,
     loopFilesMd,
-    httpLinks
+    httpLinks,
+    statsLinks,
+    validateStatsLinks
 }
 
