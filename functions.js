@@ -6,7 +6,10 @@ const fetch = require('node-fetch');
 // Validar si la ruta es absoluta, sino se convierte en relativa
 const getAbsolutePath = (userPath) => {
 let pathAbsolute = '';
-    if(pathNode.isAbsolute(userPath)){
+if(!userPath){
+    return false
+}
+if(pathNode.isAbsolute(userPath)){
         pathAbsolute = userPath;
 }else{
         pathAbsolute = pathNode.resolve(userPath)
@@ -128,4 +131,3 @@ module.exports = {
     statsLinks,
     validateStatsLinks
 }
-

@@ -14,11 +14,18 @@ const mdLinks = (path, options = { validate: false }) => {
             const allFiles = getFiles(pathUser);
             const allMdFiles = getMdFiles(allFiles)
             if( options.validate == true){
+               
+                if( allMdFiles.length === 0){
+                   reject('No md files')
+                }
                 loopFilesMd(allMdFiles)
                 .then((res) => httpLinks(res))
                 .then((res) => resolve(res))
             }
             else if( options.validate == false){
+                if( allMdFiles.length === 0){
+                    reject('No md files')
+                 }
                 loopFilesMd(allMdFiles)
                 .then((res) => resolve(res))
             } 

@@ -9,5 +9,30 @@
     "figlet": "^1.5.2",
     "marked": "^4.1.1",
     "node-fetch": "^2.6.7"
-  }
+  },
+  "description": "En este proyecto crearás una herramienta de línea de comando (CLI) así como tu\r propia librería (o biblioteca - library) en JavaScript.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "jest": "^29.2.2"
+  },
+  "scripts": {
+    "test": "jest --coverage"
+  },
+ 
+"jest":{
+  "testEnvironment":"node"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LinaAlvarado/BOG005-md-links.git"
+  },
+  "author": "Lina Alvarado",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LinaAlvarado/BOG005-md-links/issues"
+  },
+  "homepage": "https://github.com/LinaAlvarado/BOG005-md-links#readme"
 }
