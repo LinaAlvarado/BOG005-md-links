@@ -99,15 +99,29 @@ let promisesLinks = allLinks.map( link => {
     return Promise.all(promisesLinks)
 }
 
+// Encontrar Links Unicos
+const getUniqueLinks = (arrayLinks) =>{
+    const uniqueLinks = arrayLinks.reduce((counter, link)=>{
+        counter[link.href] = ++counter[link.href] || 0
+        return counter
+    }, {})
+    
+    const linksDuplicates = arrayLinks.filter( (link) =>{
+        return uniqueLinks[link.href]} )
+        const linksUniques =  arrayLinks.length - linksDuplicates.length
+        return linksUniques
+}
+
+
 // Estadisticas de funciones 
 const statsLinks = (links) => {
  const total = {
-    'Total' : links.length,
-    'Unique' : new Set (links).size
- }
-
- return total
-}
+       'Total' : links.length,
+       'Unique' : getUniqueLinks(links)   
+    }
+   
+    return total
+   }
 
 // validar links en estadisticas
 const validateStatsLinks = (links)=>{
@@ -115,7 +129,7 @@ const validateStatsLinks = (links)=>{
 
     const total = {
         'Total' : links.length,
-        'Unique' : new Set (links).size,
+        'Unique' : getUniqueLinks(links), 
         'Broken' : linksBrokens.length
      }
 
