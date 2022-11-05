@@ -1,5 +1,5 @@
 
-![portada](./portada-mdlinks.png)
+![portada](./portada.png)
 
 ## Markdown Links 🔗
 En este proyecto crearás una herramienta de línea de comando (CLI) así como tu
