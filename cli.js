@@ -4,7 +4,6 @@ const {mdLinks} = require('./index.js');
 const {statsLinks, validateStatsLinks} = require('./functions.js')
 const userPath = process.argv[2]
 const argvUser = process.argv 
-
 const cli = (route, argv)=>{
 
  if(route === undefined || null){
@@ -56,3 +55,7 @@ const cli = (route, argv)=>{
 
 
 cli(userPath, argvUser)
+
+module.exports = {
+  cli
+}

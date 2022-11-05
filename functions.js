@@ -143,5 +143,6 @@ module.exports = {
     loopFilesMd,
     httpLinks,
     statsLinks,
-    validateStatsLinks
+    validateStatsLinks,
+    getUniqueLinks
 }
