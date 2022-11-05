@@ -1,7 +1,6 @@
+# Markdown Links 🔗
 
-![portada](./portada.png)
+## Sobre
 
-## Markdown Links 🔗
-En este proyecto crearás una herramienta de línea de comando (CLI) así como tu
-propia librería (o biblioteca - library) en JavaScript.
-by: Lina
+![portada](./portada-mdlinks.jpg)
+Es una libreria ejecutable con node.js, extrae los links encontrados en archivos md. Así mismo, puedes ver el status de tus links y algunas estadísticas.

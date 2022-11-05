@@ -77,7 +77,7 @@ const uniqueLinksArray = [
       expect(getAbsolutePath(absolutePath)).toBe('E:\\Laboratoria-MDLINKS\\BOG005-md-links\\carpetaPrueba');
     });
 
-    test('Empty path', ()=>{
+    test('Empty path return false', ()=>{
       expect(getAbsolutePath("")).toBeFalsy()
     })
   });
