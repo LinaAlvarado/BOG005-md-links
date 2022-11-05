@@ -1,5 +1,5 @@
 {
-  "name": "md-links",
+  "name": "links-md",
   "version": "0.1.0",
   "engines": {
     "node": ">=14.x"
@@ -10,7 +10,7 @@
     "marked": "^4.1.1",
     "node-fetch": "^2.6.7"
   },
-  "description": "En este proyecto crearás una herramienta de línea de comando (CLI) así como tu\r propia librería (o biblioteca - library) en JavaScript.",
+  "description": "Es una libreria ejecutable con node.js, extrae los links encontrados en archivos md. Así mismo, puedes ver el status de tus links y algunas estadísticas.",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -34,5 +34,8 @@
   "bugs": {
     "url": "https://github.com/LinaAlvarado/BOG005-md-links/issues"
   },
-  "homepage": "https://github.com/LinaAlvarado/BOG005-md-links#readme"
+  "homepage": "https://github.com/LinaAlvarado/BOG005-md-links#readme",
+  "bin": {
+    "mdLinks": "cli.js"
+  }
 }
