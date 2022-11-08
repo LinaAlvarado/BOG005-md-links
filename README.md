@@ -29,7 +29,7 @@ También se puedes usar <code>--validate --stats</code>  o <code>--stats --valid
 
 ### Ayuda
 #### --help
-![help](./helppng.png)
+![help](./helpImg.png)
 
 
 
