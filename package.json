@@ -1,6 +1,6 @@
 {
   "name": "links-md",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "engines": {
     "node": ">=14.x"
   },
@@ -36,6 +36,6 @@
   },
   "homepage": "https://github.com/LinaAlvarado/BOG005-md-links#readme",
   "bin": {
-    "mdLinks": "cli.js"
+    "mdLinks": "./cli.js"
   }
 }

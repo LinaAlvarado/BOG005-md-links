@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const chalk  = require('chalk');
 const figlet = require('figlet');
 const {mdLinks} = require('./index.js');
