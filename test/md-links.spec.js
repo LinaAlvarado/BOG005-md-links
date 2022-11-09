@@ -6,12 +6,16 @@ const {
   getMdFiles,
   loopFilesMd,
   httpLinks,
-  getUniqueLinks
+  getUniqueLinks,
+  statsLinks,
+  validateStatsLinks
 } = require('../functions.js')
 
+const userPath = process.argv[2]
 const argv = [
-  'C:\\Program Files\\nodejs\\node.exe',
-  'E:\\Laboratoria-MDLINKS\\BOG005-md-links\\cli.js'
+  "mdLinks",
+  "carpetaPrueba",
+  "--v"
   ]
 const relativePath = "carpetaPrueba"
 const absolutePath = "E:\\Laboratoria-MDLINKS\\BOG005-md-links\\carpetaPrueba"
@@ -68,6 +72,16 @@ const uniqueLinksArray = [
   },
    ]
   
+   const statsLinksArray = {
+    'Total' : 5,
+    'Unique' : 1  
+   }
+
+   const statsValidateLinksArray = {
+    'Total' : 5,
+    'Unique' : 1 ,
+    'Broken' : 0
+   }
   describe('getAbsolutePath', () => {
     test('relative path converted to absolute path', () => {
       expect(getAbsolutePath(relativePath)).toBe('E:\\Laboratoria-MDLINKS\\BOG005-md-links\\carpetaPrueba');
@@ -99,7 +113,20 @@ describe('getFiles and MdFiles', ()=>{
       expect(res).toEqual(defaultArray)
      })
    });
-  })
+  
+   test('should return an error if path is invalid', ()=>{
+      expect(mdLinks("E:/Laboratoria-MDLINKS/BOG005-md-linkstaPrueba/otraCarpubCarpeta")).rejects.toMatch("Invalid Path ❌,Enter a valid path . ")
+    });
+
+    test('if don"t have md files should reject "no md files"', ()=>{
+      expect(mdLinks("carpetaPrueba\\carpetaArchivosNoMd")).rejects.toMatch('No md files')
+    });
+
+    test('if don"t have md files should reject "no md files"', ()=>{
+      expect(mdLinks("carpetaPrueba\\carpetaArchivosNoMd", {validate: true})).rejects.toMatch('No md files')
+    });
+   })
+
    test('with relative path, should returns a promise [{},{}..]', ()=>{
     mdLinks("carpetaPrueba/otraCarpeta/subCarpeta").then((res) =>{
      expect(res).toEqual(defaultArray)
@@ -122,5 +149,22 @@ describe('getFiles and MdFiles', ()=>{
    test('should returns the numbers of unique links', ()=>{
     expect(getUniqueLinks(uniqueLinksArray)).not.toBe(2)
   })
+  })
 
+  describe('statsLinks should return the total of links', ()=>{
+    test('an array of 5 links, should return 1 unique link', ()=>{
+      expect(statsLinks(uniqueLinksArray)).toEqual(statsLinksArray)
+    })
+
+    test('validateStatsLinks shouls return the total, unique and broken Links', ()=>{
+      expect(validateStatsLinks(uniqueLinksArray)).toEqual(statsValidateLinksArray)
+    })
+  })
+
+  describe('function httpLinks', ()=>{
+   test('return a promise with validated links', ()=>{
+    httpLinks(defaultArray).then((res) =>{
+      expect(res).toEqual(arrayValidate)
+    })
+   });
   })
